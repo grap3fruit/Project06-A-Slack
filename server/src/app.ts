@@ -15,10 +15,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new SocketIO.Server(server, { transports: ['websocket', 'polling'] });
 
-const channel1 = io.of('/channel1');
-const channel2 = io.of('/channel2');
+const namespace1 = io.of('/namespace1');
+const namespace2 = io.of('/namespace2');
 
-channel1.on('connection', (socket: Socket) => {
+namespace1.on('connection', (socket: Socket) => {
   console.log('채널 1 연결된 socketID : ', socket.id);
   io.to(socket.id).emit('my socket id', { socketId: socket.id });
 
@@ -31,7 +31,7 @@ channel1.on('connection', (socket: Socket) => {
   });
 });
 
-channel2.on('connection', (socket: Socket) => {
+namespace2.on('connection', (socket: Socket) => {
   console.log('채널 2 연결된 socketID : ', socket.id);
   io.to(socket.id).emit('my socket id', { socketId: socket.id });
 

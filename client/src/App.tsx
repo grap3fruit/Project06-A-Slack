@@ -5,10 +5,10 @@ import io from 'socket.io-client';
 const domain = 'http://localhost:3000';
 
 const App = () => {
-  const socket1 = io(`${domain}/channel1`, {
+  const socket1 = io(`${domain}/namespace1`, {
     transports: ['websocket', 'polling'],
   });
-  const socket2 = io(`${domain}/channel2`, {
+  const socket2 = io(`${domain}/namespace2`, {
     transports: ['websocket', 'polling'],
   });
 
