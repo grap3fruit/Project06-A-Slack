@@ -13,23 +13,39 @@ import http from 'http';
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
-const io = new SocketIO.Server(server, { transports: ['websocket', 'polling'] });
+const io = new SocketIO.Server(server, {
+  transports: ['websocket', 'polling'],
+  cors: { origin: '*' },
+});
 
 const namespace1 = io.of('/namespace1');
 const namespace2 = io.of('/namespace2');
 
 namespace1.on('connection', (socket: Socket) => {
   console.log('채널 1 연결된 socketID : ', socket.id);
-  io.to(socket.id).emit('my socket id', { socketId: socket.id });
+  // io.to(socket.id).emit('my socket id', { socketId: socket.id });
 
   socket.on('msg', (data) => {
     console.log('channel 1 메시지', data);
+    // io.to('room1').emit('room1', { title: 'room1' });
   });
+
+  // socket.on('room1', (data) => {
+  //   console.log('room 1 메시지', data);
+  // });
 
   socket.on('disconnect', () => {
     console.log('연결 끊김, 바이');
   });
+
+  socket.join('room1');
+  socket.join('room2');
+
+  // io.to('room1').emit('my socket room', { title: 'room1' });
+  // io.emit('my socket namespace', { name: 'namespace1' });
 });
+
+io.to('room1').emit('room1 msg', 'room1 meessage');
 
 namespace2.on('connection', (socket: Socket) => {
   console.log('채널 2 연결된 socketID : ', socket.id);
